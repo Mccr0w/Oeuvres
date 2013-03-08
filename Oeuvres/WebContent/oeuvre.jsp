@@ -32,10 +32,7 @@
                        <option value="<c:out value="${pro.idProprietaire}" />"><c:out value="${pro.nomProprietaire} ${pro.prenomProprietaire}" /></option>
                        </c:otherwise>
                        </c:choose>
-                       
                        </c:forEach>
-
-
             </SELECT>
             <br><br>
             <input type="submit" value="Envoi">

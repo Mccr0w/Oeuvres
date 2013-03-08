@@ -27,13 +27,10 @@
             <br><br>
             </p>
             Adhérent : <SELECT name="lstAdherents">
-
-
             </SELECT>
             <br><br>
             <input type="submit" value="Envoi">
             <p>
-
             </p>
         </form>
     </body>

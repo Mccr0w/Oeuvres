@@ -144,7 +144,7 @@ public class Controleur extends HttpServlet {
 			Adherent a = new Adherent(request.getParameter("nom"), request.getParameter("prenom"),new TreeSet<Reservation>());
 			GenericHibernate<Adherent> ah = new GenericHibernate<Adherent>(a);
 			ah.persist(a);
-			destinationPage = "/index.jsp";
+			destinationPage = "/acceuil.jsp";
 			
 		}
 		
