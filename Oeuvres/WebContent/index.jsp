@@ -9,7 +9,7 @@
     </head>
     <body>
         <h1 align='center'>Accès application Oeuvres</h1>
-        <form action="xxxxxxxxxx" method="post" name="frmLogin">
+        <form action="Controleur" method="post" name="frmLogin">
             <p>
             Login : <input type="text" name="txtLogin">
             <br><br>

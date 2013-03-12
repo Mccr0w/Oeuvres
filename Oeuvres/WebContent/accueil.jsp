@@ -16,9 +16,9 @@
     <body>
         <h1 align="center">Gestion des oeuvres</h1>
         <p align="center">
-            <a href="xxxxxxx">Ajouter une oeuvre</a><br>
-            <a href="xxxxxxx">Confirmer une réservation</a><br>
-            <a href="xxxxxxx">Consulter le catalogue</a><br>
+            <a href="Controleur?action=saisieOeuvre">Ajouter une oeuvre</a><br>
+            <a href="Controleur?action=xxxxxxxxxxxx">Confirmer une réservation</a><br>
+            <a href="Controleur?action=catalogueOeuvre">Consulter le catalogue</a><br>
             <a href="xxxxxxx">Se déconnecter</a>
         </p>
             <p>

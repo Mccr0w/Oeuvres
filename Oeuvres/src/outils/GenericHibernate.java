@@ -4,6 +4,8 @@ package outils;
 
 import java.util.List;
 
+import metier.ReservationId;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
@@ -82,6 +84,23 @@ public class GenericHibernate<T> {
 	}
 
 	public T findById(T t,int id) {
+		log.debug("getting "+t.getClass().toString()+" instance with id: " + id);
+		try {
+			T instance = (T) sessionFactory
+					.getCurrentSession().get(t.getClass(),id);
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+			} else {
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+	
+	public T findById(T t,ReservationId id) {
 		log.debug("getting "+t.getClass().toString()+" instance with id: " + id);
 		try {
 			T instance = (T) sessionFactory

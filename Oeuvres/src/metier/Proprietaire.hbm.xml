@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 22 f?vr. 2013 16:26:36 by Hibernate Tools 4.0.0 -->
+<!-- Generated 12 mars 2013 16:04:39 by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
     <class name="metier.Proprietaire" table="proprietaire" catalog="baseoeuvre">
         <id name="idProprietaire" type="java.lang.Integer">
