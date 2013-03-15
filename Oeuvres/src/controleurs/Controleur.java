@@ -21,7 +21,6 @@ import outils.GenericHibernate;
 import outils.Utilitaire;
 import outils.hibernateUtil;
 
-
 import metier.*;
 
 /**
@@ -30,7 +29,7 @@ import metier.*;
 @WebServlet("/Controleur")
 public class Controleur extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final String ACTION_TYPE = "action";
 	private static final String SAISIE_OEUVRE = "saisieOeuvre";
 	private static final String AJOUT_OEUVRE = "ajoutOeuvre";
@@ -41,7 +40,7 @@ public class Controleur extends HttpServlet {
 	private static final String CONFIRMER_RESERVATION = "confirmerReservation";
 	private static final String MODIFIER_OEUVRE = "modifierOeuvre";
 	private static final String AJOUT_ADHERENT = "ajoutAdherent";
-	private static final String DECONNEXION = "deconnexion";
+	private static final String CONNEXION = "connexion";
 	private static final String ERROR_PAGE = "/Erreur.jsp";
 
 	/**
@@ -109,6 +108,7 @@ public class Controleur extends HttpServlet {
 	protected void processusTraiteRequete(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException,
 			Exception {
+		
 		String actionName = request.getParameter(ACTION_TYPE);
 		String destinationPage = ERROR_PAGE;
 		System.out.println("Action: <" + actionName + ">");
@@ -117,192 +117,172 @@ public class Controleur extends HttpServlet {
 		if (LISTE_RESERVATION.equals(actionName)) {
 
 			Reservation r = new Reservation();
-			GenericHibernate<Reservation> rh = new GenericHibernate<Reservation>(r);
+			GenericHibernate<Reservation> rh = new GenericHibernate<Reservation>(
+					r);
 			ArrayList<Reservation> liste = new ArrayList<Reservation>();
 			liste = (ArrayList<Reservation>) rh.findAll(r);
-			
+
 			request.setAttribute("liste", liste);
-			
+
 			destinationPage = "/listereservations.jsp";
-			
-		}else if (CATALOGUE_OEUVRE.equals(actionName)) {
+
+		} else if (CATALOGUE_OEUVRE.equals(actionName)) {
 
 			Oeuvrevente r = new Oeuvrevente();
-			GenericHibernate<Oeuvrevente> rh = new GenericHibernate<Oeuvrevente>(r);
+			GenericHibernate<Oeuvrevente> rh = new GenericHibernate<Oeuvrevente>(
+					r);
 			ArrayList<Oeuvrevente> liste = new ArrayList<Oeuvrevente>();
 			liste = (ArrayList<Oeuvrevente>) rh.findAll(r);
 
 			request.setAttribute("liste", liste);
-			
+
 			destinationPage = "/catalogue.jsp";
-		}
-		else if(AJOUT_ADHERENT.equals(actionName)){
-			
-			Adherent a = new Adherent(request.getParameter("nom"), request.getParameter("prenom"),new TreeSet<Reservation>());
+		} else if (AJOUT_ADHERENT.equals(actionName)) {
+
+			Adherent a = new Adherent(request.getParameter("nom"),
+					request.getParameter("prenom"), new TreeSet<Reservation>());
 			GenericHibernate<Adherent> ah = new GenericHibernate<Adherent>(a);
 			ah.persist(a);
 			destinationPage = "/accueil.jsp";
-			
-		}
-		else if(SAISIE_OEUVRE.equals(actionName)){
-			
-		    Proprietaire p = new Proprietaire();
-			GenericHibernate<Proprietaire> ph = new GenericHibernate<Proprietaire>(p);
+
+		} else if (SAISIE_OEUVRE.equals(actionName)) {
+
+			Proprietaire p = new Proprietaire();
+			GenericHibernate<Proprietaire> ph = new GenericHibernate<Proprietaire>(
+					p);
 			ArrayList<Proprietaire> liste = new ArrayList<Proprietaire>();
 			liste = (ArrayList<Proprietaire>) ph.findAll(p);
-			
+
 			destinationPage = "/oeuvre.jsp";
-			
+
 			request.setAttribute("listeproprietaires", liste);
 			request.setAttribute("titre", "Ajouter une Oeuvre");
-			
-		}
-		else if(MODIFIER_OEUVRE.equals(actionName)){
-			
+
+		} else if (MODIFIER_OEUVRE.equals(actionName)) {
+
 			Oeuvrevente o = new Oeuvrevente();
-			GenericHibernate<Oeuvrevente> oh = new GenericHibernate<Oeuvrevente>(o);
-			o=oh.findById(o, Integer.parseInt(request.getParameter("id")));
-			
-		    Proprietaire p = new Proprietaire();
-			GenericHibernate<Proprietaire> ph = new GenericHibernate<Proprietaire>(p);
+			GenericHibernate<Oeuvrevente> oh = new GenericHibernate<Oeuvrevente>(
+					o);
+			o = oh.findById(o, Integer.parseInt(request.getParameter("id")));
+
+			Proprietaire p = new Proprietaire();
+			GenericHibernate<Proprietaire> ph = new GenericHibernate<Proprietaire>(
+					p);
 			ArrayList<Proprietaire> liste = new ArrayList<Proprietaire>();
 			liste = (ArrayList<Proprietaire>) ph.findAll(p);
-			
+
 			destinationPage = "/oeuvre.jsp";
-			
+
 			request.setAttribute("listeproprietaires", liste);
 			request.setAttribute("titre", "Modifier une Oeuvre");
 			request.setAttribute("oeuvre", o);
-		}
-		else if(AJOUT_OEUVRE.equals(actionName)){
-			
-			Oeuvrevente r = new Oeuvrevente();
-			GenericHibernate<Oeuvrevente> rh = new GenericHibernate<Oeuvrevente>(r);
-			
-			if (request.getParameter("id") != ""){
+		} else if (AJOUT_OEUVRE.equals(actionName)) {
 
-				r=rh.findById(r, Integer.parseInt(request.getParameter("id")));
-				
-			}
-			else{
+			Oeuvrevente r = new Oeuvrevente();
+			GenericHibernate<Oeuvrevente> rh = new GenericHibernate<Oeuvrevente>(
+					r);
+
+			if (request.getParameter("id") != "") {
+
+				r = rh.findById(r, Integer.parseInt(request.getParameter("id")));
+
+			} else {
 				r.setEtatOeuvrevente("L");
 			}
-			
-			r.setPrixOeuvrevente(Float.parseFloat(request.getParameter("txtPrix")));
-			r.setTitreOeuvrevente(request.getParameter("txtTitre"));				
-		    Proprietaire p = new Proprietaire();
-			GenericHibernate<Proprietaire> ph = new GenericHibernate<Proprietaire>(p);
-			p = ph.findById(p,Integer.parseInt(request.getParameter("proprietaire")));
-			
+
+			r.setPrixOeuvrevente(Float.parseFloat(request
+					.getParameter("txtPrix")));
+			r.setTitreOeuvrevente(request.getParameter("txtTitre"));
+			Proprietaire p = new Proprietaire();
+			GenericHibernate<Proprietaire> ph = new GenericHibernate<Proprietaire>(
+					p);
+			p = ph.findById(p,
+					Integer.parseInt(request.getParameter("proprietaire")));
+
 			r.setProprietaire(p);
-			
+
 			rh.persist(r);
-			
+
 			destinationPage = "/accueil.jsp";
-		}else if(RESERVER_OEUVRE.equals(actionName)){
-			
-		    Adherent a = new Adherent();
+		} else if (RESERVER_OEUVRE.equals(actionName)) {
+
+			Adherent a = new Adherent();
 			GenericHibernate<Adherent> ah = new GenericHibernate<Adherent>(a);
 			ArrayList<Adherent> liste = new ArrayList<Adherent>();
 			liste = (ArrayList<Adherent>) ah.findAll(a);
-			
+
 			Oeuvrevente o = new Oeuvrevente();
-			GenericHibernate<Oeuvrevente> oh = new GenericHibernate<Oeuvrevente>(o);
-			o=oh.findById(o, Integer.parseInt(request.getParameter("id")));
-			
+			GenericHibernate<Oeuvrevente> oh = new GenericHibernate<Oeuvrevente>(
+					o);
+			o = oh.findById(o, Integer.parseInt(request.getParameter("id")));
+
 			destinationPage = "/reservation.jsp";
-			
+
 			Date date = new Date();
-			
+
 			request.setAttribute("listeadherent", liste);
 			request.setAttribute("oeuvre", o);
-			request.setAttribute("date", Utilitaire.DateToStr(date, "dd/MM/yyyy"));
-		}
-		else if(VALIDER_RESERVATION.equals(actionName)){
-		    Adherent a = new Adherent();
+			request.setAttribute("date",
+					Utilitaire.DateToStr(date, "dd/MM/yyyy"));
+		} else if (VALIDER_RESERVATION.equals(actionName)) {
+			Adherent a = new Adherent();
 			GenericHibernate<Adherent> ah = new GenericHibernate<Adherent>(a);
-			a = ah.findById(a, Integer.parseInt(request.getParameter("lstAdherents")) );
-			
+			a = ah.findById(a,
+					Integer.parseInt(request.getParameter("lstAdherents")));
+
 			Oeuvrevente o = new Oeuvrevente();
-			GenericHibernate<Oeuvrevente> oh = new GenericHibernate<Oeuvrevente>(o);
-			o=oh.findById(o, Integer.parseInt(request.getParameter("id")));
+			GenericHibernate<Oeuvrevente> oh = new GenericHibernate<Oeuvrevente>(
+					o);
+			o = oh.findById(o, Integer.parseInt(request.getParameter("id")));
 			o.setEtatOeuvrevente("R");
 			oh.persist(o);
-			
+
 			destinationPage = "/accueil.jsp";
-			
-			Date date = Utilitaire.StrToDate(request.getParameter("txtDate"), "dd/MM/yyyy");
-			
+
+			Date date = Utilitaire.StrToDate(request.getParameter("txtDate"),
+					"dd/MM/yyyy");
+
 			Reservation r = new Reservation();
 			r.setAdherent(a);
 			r.setDateReservation(date);
 			r.setOeuvrevente(o);
 			r.setStatut("A");
-			ReservationId id = new ReservationId(o.getIdOeuvrevente(), a.getIdAdherent());			
+			ReservationId id = new ReservationId(o.getIdOeuvrevente(),
+					a.getIdAdherent());
 			r.setId(id);
-	
-			
-			GenericHibernate<Reservation> rh = new GenericHibernate<Reservation>(r);
+
+			GenericHibernate<Reservation> rh = new GenericHibernate<Reservation>(
+					r);
 			rh.persist(r);
-		}	else if(CONFIRMER_RESERVATION.equals(actionName)){
+		} else if (CONFIRMER_RESERVATION.equals(actionName)) {
 
 			Reservation r = new Reservation();
-			GenericHibernate<Reservation> rh = new GenericHibernate<Reservation>(r);
-			ReservationId ri = new ReservationId(Integer.parseInt(request.getParameter("idO")), Integer.parseInt(request.getParameter("idA")));
+			GenericHibernate<Reservation> rh = new GenericHibernate<Reservation>(
+					r);
+			ReservationId ri = new ReservationId(Integer.parseInt(request
+					.getParameter("idO")), Integer.parseInt(request
+					.getParameter("idA")));
 			r = rh.findById(r, ri);
-			
+
 			r.setStatut("C");
-			
+
 			rh.persist(r);
-			
+
 			destinationPage = "/accueil.jsp";
+		} else if (CONNEXION.equals(actionName)) {
+			if (request.getParameter("txtPwd").compareTo("user") == 0
+					&& request.getParameter("txtLogin").compareTo("user") == 0) {
+				destinationPage = "/accueil.jsp";
+			} else {
+				request.setAttribute("erreur",
+						"Login ou mot de passe inconnus !");
+
+			}
 		}
 
-		
-
-		/*
-		 * if (SAISIE_STAGE.equals(actionName)) { destinationPage =
-		 * "/SaisieStage.jsp"; } else if (AFFICHER_STAGE.equals(actionName)) {
-		 * Stage monStage = new Stage(); ArrayList<Stage> stages = new
-		 * ArrayList<Stage>(); stages.addAll(monStage.afficheLesStages()); //
-		 * Permet d'utiliser les stages dans le .JSP !!!
-		 * request.setAttribute("stages", stages); destinationPage =
-		 * "/AfficherStage.jsp"; } else if (RECHERCHER_STAGE.equals(actionName))
-		 * { destinationPage = "/RechercherStage.jsp"; } else if
-		 * (SAUVER_STAGE.equals(actionName)) { SimpleDateFormat sdf = new
-		 * SimpleDateFormat("dd/mm/yyyy");
-		 * 
-		 * Stage monStage = new Stage(request.getParameter("id"),
-		 * request.getParameter("libelle"), sdf.parse(request
-		 * .getParameter("datedebut")), sdf.parse(request
-		 * .getParameter("datefin")), Integer.parseInt(request
-		 * .getParameter("nbplaces")),
-		 * Integer.parseInt(request.getParameter("nbinscrits")));
-		 * monStage.insertionStage(); destinationPage = "/index.jsp"; } else if
-		 * (CHERCHER_STAGE.equals(actionName)) { Stage monStage = new Stage();
-		 * ArrayList<Stage> stages = new ArrayList<Stage>();
-		 * stages.addAll(monStage.rechercheLesStages(request
-		 * .getParameter("stageChercher"))); // Permet d'utiliser les stages
-		 * dans le .JSP !!!!!!!!!!!!!!!!!!!!!!! request.setAttribute("stages",
-		 * stages); destinationPage = "/AfficherStage.jsp"; } else if
-		 * (SUPPRIMER_STAGE.equals(actionName)) { Stage monStage = new Stage();
-		 * monStage.supprimeLesStages(request.getParameter(ID_TYPE));
-		 * destinationPage = "/index.jsp"; } else if
-		 * (MODIFIER_STAGE.equals(actionName)) { Stage monStage = new Stage();
-		 * monStage.modifierStage( request.getParameter("id"),
-		 * request.getParameter("libelle"), request.getParameter("datedebut"),
-		 * request.getParameter("datefin"), request.getParameter("nbplaces"),
-		 * request.getParameter("nbinscrits") ); destinationPage = "/index.jsp";
-		 * 
-		 * } else if (EDITER_STAGE.equals(actionName)) { Stage stageAModifier =
-		 * new Stage(); if (!request.getParameter(ID_TYPE).isEmpty()) {
-		 * stageAModifier = stageAModifier.chargerUnStages(request
-		 * .getParameter(ID_TYPE)); request.setAttribute("stage",
-		 * stageAModifier); } destinationPage = "/SaisieStage.jsp"; }
-		 */
-
-		//Redirection vers la page jsp appropriee
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(destinationPage);
+		// Redirection vers la page jsp appropriee
+		RequestDispatcher dispatcher = getServletContext()
+				.getRequestDispatcher(destinationPage);
 		dispatcher.forward(request, response);
 
 	}

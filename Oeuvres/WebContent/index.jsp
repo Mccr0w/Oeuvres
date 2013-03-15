@@ -10,6 +10,7 @@
     <body>
         <h1 align='center'>Accès application Oeuvres</h1>
         <form action="Controleur" method="post" name="frmLogin">
+        	<input type="hidden" name="action" value="connexion" id="type" />
             <p>
             Login : <input type="text" name="txtLogin">
             <br><br>
@@ -17,9 +18,11 @@
             </p>
             <input type="submit" value="Envoi">
             <br>
+            Log : user
+            <br>
+            MDP : user
             <br>
             <p>
-            </p>
         </form>
 
     </body>
