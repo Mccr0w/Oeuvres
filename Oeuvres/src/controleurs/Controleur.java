@@ -143,6 +143,7 @@ public class Controleur extends HttpServlet {
 					request.getParameter("prenom"), new TreeSet<Reservation>());
 			GenericHibernate<Adherent> ah = new GenericHibernate<Adherent>(a);
 			ah.persist(a);
+			request.setAttribute("message", "L'adhérent a été ajouté.");
 			destinationPage = "/accueil.jsp";
 
 		} else if (SAISIE_OEUVRE.equals(actionName)) {
@@ -185,9 +186,10 @@ public class Controleur extends HttpServlet {
 			if (request.getParameter("id") != "") {
 
 				r = rh.findById(r, Integer.parseInt(request.getParameter("id")));
-
+				request.setAttribute("message", "L'oeuvre a été modifiée.");
 			} else {
 				r.setEtatOeuvrevente("L");
+				request.setAttribute("message", "L'oeuvre a été ajoutée.");
 			}
 
 			r.setPrixOeuvrevente(Float.parseFloat(request
@@ -202,7 +204,7 @@ public class Controleur extends HttpServlet {
 			r.setProprietaire(p);
 
 			rh.persist(r);
-
+			
 			destinationPage = "/accueil.jsp";
 		} else if (RESERVER_OEUVRE.equals(actionName)) {
 
@@ -237,6 +239,7 @@ public class Controleur extends HttpServlet {
 			o.setEtatOeuvrevente("R");
 			oh.persist(o);
 
+			request.setAttribute("message", "La réservation a été validée.");
 			destinationPage = "/accueil.jsp";
 
 			Date date = Utilitaire.StrToDate(request.getParameter("txtDate"),
@@ -267,11 +270,12 @@ public class Controleur extends HttpServlet {
 			r.setStatut("C");
 
 			rh.persist(r);
-
+			request.setAttribute("message", "La réservation a été confirmée.");
 			destinationPage = "/accueil.jsp";
 		} else if (CONNEXION.equals(actionName)) {
 			if (request.getParameter("txtPwd").compareTo("user") == 0
 					&& request.getParameter("txtLogin").compareTo("user") == 0) {
+				request.setAttribute("message", "Vous êtes actuellement connecté.");
 				destinationPage = "/accueil.jsp";
 			} else {
 				request.setAttribute("erreur",
